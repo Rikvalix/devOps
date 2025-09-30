@@ -1,0 +1,28 @@
+services:
+  sonarqube:
+    image: sonarqube:latest
+    container_name: sonarqube
+    restart: always
+    ports:
+      - "127.0.0.1:9000:9000"
+    environment:
+      - SONAR_JDBC_URL=${SONAR_JDBC_URL}
+      - SONAR_JDBC_USERNAME=${SONAR_JDBC_USER}
+      - SONAR_JDBC_PASSWORD=${SONAR_JDBC_PASSWORD}
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE}    
+    networks:
+      - ci_network
+
+    volumes:
+      - "sonarqube_data:/opt/sonarqube/data"
+      - "sonarqube_extensions:/opt/sonarqube/extensions"
+      - "sonarqube_logs:/opt/sonarqube/logs"
+
+networks:
+  ci_network:
+    external: true
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
