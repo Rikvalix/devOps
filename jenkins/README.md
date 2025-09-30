@@ -85,15 +85,22 @@ docker run \
 
 ---
 
-## UFW Config
-
-### Autoriser Jenkins
-
-La commande autorise la connexion TCP et UDP sur le port 49000 :
-
-```bash
-sudo ufw allow 49000
+## Nginx et Jenkins
+Suivre la configuration de la documentation de jenkins [lien](https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-with-jenkins/reverse-proxy-configuration-nginx/)
 ```
+
+- Down le container et le supprimer
+```bash
+docker container stop jenkins_blueocean
+docker container remove jenkins_blueocean
+```
+- Relancer le container blue-ocean 
+
+Modifier la partie publish afin de faire émettre le container uniquement sur le localhost
+```
+--publish 127.0.0.1:49000:8080
+```
+
 
 ---
 
@@ -233,26 +240,12 @@ Dans ce cas, deux choix s'offrent à vous :
 
 ---
 
-# Nginx et Jenkins
-Suivre la configuration de la documentation de jenkins [lien](https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-with-jenkins/reverse-proxy-configuration-nginx/)
+## Intégration SonarQube
+[Youtube](https://youtu.be/KsTMy0920go?si=SP-aJNGN_mX05OIq)
 
-- Reconfigurer le pare-feu
+- Installer le plugin `SonarQube Scanner for Jenkins Version2.18`
 
-```bash
-sudo ufw deny 49000
-```
 
-- Down le container et le supprimer
-```bash
-docker container stop jenkins_blueocean
-docker container remove jenkins_blueocean
-```
-- Relancer le container blue-ocean 
-
-Modifier la partie publish afin de faire émettre le container uniquement sur le localhost
-```
---publish 127.0.0.1:49000:8080
-```
 
 
 
