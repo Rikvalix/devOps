@@ -6,10 +6,10 @@ services:
     ports:
       - "127.0.0.1:9000:9000"
     environment:
-      SONAR_JDBC_URL: jdbc:postgresql://postgresql-postgres-1:5432/sonarqube?currentSchema=public
-      SONAR_JDBC_USERNAME: sonarqube
-      SONAR_JDBC_PASSWORD: fsLE8uTGr5K2vKRm
-      SONAR_ES_BOOTSTRAP_CHECKS_DISABLE: true    
+      - SONAR_JDBC_URL=${SONAR_JDBC_URL}
+      - SONAR_JDBC_USERNAME=${SONAR_JDBC_USER}
+      - SONAR_JDBC_PASSWORD=${SONAR_JDBC_PASSWORD}
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE}    
     networks:
       - ci_network
 
