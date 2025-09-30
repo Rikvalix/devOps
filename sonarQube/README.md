@@ -2,11 +2,10 @@
 
 ## Installation avec Docker
 
-SonarQube n'émettra que sur le localhost port 9000
 
-```bash
-docker run -d --name sonarqube -e SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true -p 127.0.0.1:9000:9000 sonarqube:latest
-```
+Lancer le service avec la commande `docker compose up sonarqube`
+
+
 ### Nginx Config
 ```bash
 server {
@@ -38,7 +37,7 @@ CREATE DATABASE sonarqube OWNER sonarqube;
 ```sql
 ALTER USER sonarqube SET search_path to sonarqube;
 ```
-    
+
 
 # Ressources
 - [Installation](https://docs.sonarsource.com/sonarqube-community-build/try-out-sonarqube/)
