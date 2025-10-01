@@ -1,4 +1,40 @@
 services:
+  jenkins:
+    image: docker:dind
+    container_name: jenkins-docker
+    restart: always
+    privileged: true
+    ports:
+      - "127.0.0.1:2376:2376"
+    environment:
+      - DOCKER_TLS_CERTDIR=${JENKINS_DOCKER_TLS_CERTDIR}
+    networks:
+      ci_network:
+        aliases:
+          - docker
+    volumes:
+      - "jenkins-docker-certs:/certs/client"
+      - "jenkins-data:/var/jenkins_home"
+    command: ["--storage-driver", "overlay2"]
+
+  jenkins-blueocean:
+    build:
+      context: ./jenkins
+      dockerfile: Dockerfile
+    container_name: jenkins-blueocean
+    restart: on-failure
+    networks:
+      ci_network:
+    environment:
+      - DOCKER_HOST=${JENKINS_DOCKER_HOST} 
+      - DOCKER_CERT_PATH=${JENKINS_DOCKER_CERT_PATH}
+      - DOCKER_TLS_VERIFY=${JENKINS_DOCKER_TLS_VERIFY}
+    ports:
+      - "127.0.0.1:49000:8080"
+    volumes:
+      - jenkins-data:/var/jenkins_home
+      - jenkins-docker-certs:/certs/client:ro
+  
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
@@ -23,6 +59,8 @@ networks:
     external: true
 
 volumes:
+  jenkins-docker-certs:
+  jenkins-data:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
