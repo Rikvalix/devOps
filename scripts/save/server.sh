@@ -1,12 +1,13 @@
 #!/bin/bash
 
 # .env
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 set -a # mode allexport 
-source config.env
+source $SCRIPT_DIR/config.env
 set +a # désactivation du mode allexport
 
 
-BACKUP_DIR="$HOME/srv/docker-backups"*
+BACKUP_DIR="$HOME/srv/docker-backups"
 LOG_DIR="$HOME/srv/logs/docker-backups"
 DATE=$(date +%F)
 KEEP_DAYS=14
