@@ -2,19 +2,22 @@
 
 # .env
 set -a # mode allexport 
-source .env
+source config.env
 set +a # désactivation du mode allexport
 
 
-BACKUP_DIR="$HOME/srv/docker-backups"
+BACKUP_DIR="$HOME/srv/docker-backups"*
+LOG_DIR="$HOME/srv/logs/docker-backups"
 DATE=$(date +%F)
 KEEP_DAYS=14
 
 echo "Lancement du programme de sauvegarde"
-echo "Dossier: $BACKUP_DIR"
+echo "Dossier des archives: $BACKUP_DIR"
+echo "Dossier des logs: $LOG_DIR"
 echo "Date: $DATE"
 echo "Rotation: $KEEP_DAYS"
 
+mkdir -p "$LOG_DIR" 
 mkdir -p "$BACKUP_DIR/$DATE" # Créer le dossier dans le /home de l'utilisateur
 
 # Sauvegarde des volumes
