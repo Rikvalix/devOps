@@ -2,6 +2,8 @@
 
 La sauvegarde est géré par des tâches cron permettant de paramétrer l'exécution du script `server.sh`.
 
+# Partie serveur 
+
 ## Configuration
 
 1. Renommer le fichier `config.env-template` en `config.env`
@@ -22,7 +24,7 @@ Le répertoire de l'archive est au format `Année-Mois-Jour`
 
 - Modifier les tâches cron
 ```bash
-crontab -e
+sudo crontab -e
 ```
 - Pour une exécution le **lundi** et le **jeudi** à 3h du matin
 ```bash
@@ -33,4 +35,6 @@ crontab -e
 ```bash
 0 3 * * 1 /home/lev/dev-ops/scripts/save/server.sh >> /home/lev/srv/logs/docker-backups/backup.log 2>&1
 ```
+
+# Partie client
 
