@@ -1,4 +1,9 @@
 #!/bin/bash
+# Nom:  network.sh
+# Objet: Créer un network docker et ajouter un container existant
+# Auteur: Titouan DELION--DESROCHERS
+# Date: 2025-10-03
+
 
 # Variables par défaut
 network=""

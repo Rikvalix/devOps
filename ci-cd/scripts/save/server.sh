@@ -1,4 +1,9 @@
 #!/bin/bash
+# Nom:  server.sh
+# Objet: Sauvegarder les volumes docker et envoyer une notification Discord
+# Auteur: Titouan DELION--DESROCHERS
+# Date: 2025-10-03
+
 
 # .env
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
