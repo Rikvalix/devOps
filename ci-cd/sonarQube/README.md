@@ -56,4 +56,3 @@ ALTER USER sonarqube SET search_path to sonarqube;
 # Ressources
 - [Installation](https://docs.sonarsource.com/sonarqube-community-build/try-out-sonarqube/)
 - [Configuration Database](https://docs.sonarsource.com/sonarqube-community-build/server-installation/installing-the-database)
--
