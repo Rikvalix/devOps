@@ -17,7 +17,7 @@ Réseau docker: ci-network
 | Jenkins    | 2376  | docker:dind |
 | SonarQube  | 9000  | sonarqube   |
 | PostgreSQL | 5432  | postgresql  |
-
+| Registry   | 5050  | registry:2  |
 
 ### Schéma du réseau
 

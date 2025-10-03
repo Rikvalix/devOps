@@ -53,6 +53,16 @@ services:
       - "sonarqube_data:/opt/sonarqube/data"
       - "sonarqube_extensions:/opt/sonarqube/extensions"
       - "sonarqube_logs:/opt/sonarqube/logs"
+  
+  registry:
+    image: registry:2
+    container_name: registry
+    restart: always
+    ports:
+      - "127.0.0.1:5050:5000"
+    volumes:
+      - registry-data:/var/lib/registry
+      - ./registry/config.yml:/etc/docker/registry/config.yml
 
 networks:
   ci_network:
@@ -64,3 +74,5 @@ volumes:
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
+  registry-data:
+    driver: local
