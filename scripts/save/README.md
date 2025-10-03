@@ -24,16 +24,16 @@ Le répertoire de l'archive est au format `Année-Mois-Jour`
 
 - Modifier les tâches cron
 ```bash
-sudo crontab -e
+crontab -e
 ```
 - Pour une exécution le **lundi** et le **jeudi** à 3h du matin
 ```bash
-0 3 * * 1,4 /home/lev/dev-ops/scripts/save/server.sh >> /home/lev/srv/logs/docker-backups/backup.log 2>&1
+0 3 * * 1,4 bash /path/du/script/server.sh >> /path/des/logs/backup.log 2>&1
 ```
 
 - Pour une exécution **hebdomadaire**, lundi à 3h du matin 
 ```bash
-0 3 * * 1 /home/lev/dev-ops/scripts/save/server.sh >> /home/lev/srv/logs/docker-backups/backup.log 2>&1
+0 3 * * 1 bash /path/du/script/server.sh >> /path/des/logs/backup.log 2>&1
 ```
 
 # Partie client
