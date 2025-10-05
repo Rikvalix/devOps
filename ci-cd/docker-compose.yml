@@ -58,6 +58,8 @@ services:
     image: registry:2
     container_name: registry
     restart: always
+    networks:
+      - ci_network
     ports:
       - "127.0.0.1:5050:5000"
     volumes:
