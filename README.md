@@ -9,6 +9,8 @@ Une présentation Canva est disponible à ce [lien](https://www.canva.com/design
 - SonarQube: https://sonarqube.noknok.dev
 
 ## Réseaux
+Pour tous les tableaux la colonne `Port` indique le port sur le localhost de l'hôte
+
 Réseau docker: ci-network
 
 | Service    | Port  | Image       |
@@ -18,6 +20,27 @@ Réseau docker: ci-network
 | SonarQube  | 9000  | sonarqube   |
 | PostgreSQL | 5432  | postgresql  |
 | Registry   | 5050  | registry:2  |
+
+Réseau: dev
+
+| Service        | Port |
+|----------------|------|
+| Ktor dev       | 5051 |
+| Postgresql dev | 5433 |
+
+Réseau: recette
+
+| Service        | Port |
+|----------------|------|
+| Ktor rec       | 5052 |
+| Postgresql rec | 5434 |
+
+Réseau prod
+
+| Service         | Port |
+|-----------------|------|
+| Ktor prod       | 5053 |
+| Postgresql prod | 5435 |
 
 ### Schéma du réseau
 
