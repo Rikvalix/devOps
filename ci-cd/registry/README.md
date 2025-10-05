@@ -43,6 +43,10 @@ docker pull localhost:5050/<image>:<tag>
 
 Registry supporte l'envoi de notification via un webhook, [Documentation](https://distribution.github.io/distribution/about/notifications/)
 
+## Tips
+
+- Pour rapidement consulter la liste des images stockés j'ai crée un alias dans le `.bashrc`
+
 # Ressources
 - [Documentation officielle](https://distribution.github.io/distribution/)
 

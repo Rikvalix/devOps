@@ -1,15 +1,15 @@
-FROM openjdk:21-jdk-slim as ktor-builder
+FROM openjdk:21-jdk-slim AS ktor-builder
 
 # Installation Gradle
-ARG GRADLE_VERSION=9.1
+ARG GRADLE_VERSION=9.1.0
+
 RUN apt-get update && \
-    apt-get install -y wget unzip && \
+    apt-get install -y wget unzip curl ca-certificates && \
+    mkdir -p /opt/gradle && \
     wget https://services.gradle.org/distributions/gradle-${GRADLE_VERSION}-bin.zip -P /tmp && \
-    unzip -d /opt/gradle /tmp/gradle-${GRADLE_VERSION}-bin.zip && \
-    rm /tmp/gradle-${GRADLE_VERSION}-bin.zip
+    unzip /tmp/gradle-${GRADLE_VERSION}-bin.zip -d /opt/gradle && \
+    ln -s /opt/gradle/gradle-${GRADLE_VERSION}/bin/gradle /usr/bin/gradle && \
+    rm /tmp/gradle-${GRADLE_VERSION}-bin.zip && \
+    apt-get clean
 
 WORKDIR /app 
-
-# Copie des fichiers de configuration Gradle
-COPY build.gradle.kts settings.gradle.kts gradle.properties /app/
-RUN gradle build --dry-run

@@ -2,7 +2,7 @@
 # Nom:  create_environment.sh
 # Objet: Créer un environnement de développement avec Docker
 # Auteur: Titouan DELION--DESROCHERS
-# Date: 2025-10-03
+# Date: 2025-10-05
 
 
 # Script de création d'un environnement de développement
@@ -29,3 +29,6 @@ fi
 # Création du container PostgreSQL
 
 # Création du container Ktor
+
+# Vérifier si le builder est dans le registry
+
