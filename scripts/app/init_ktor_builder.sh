@@ -5,7 +5,7 @@
 # Date: 2025-10-05
 
 # Chargement utils
-source "$(dirname "$0")/utils/common.sh"
+source "$(dirname "$0")/../utils/common.sh"
 
 # Variables par défaut
 REGISTRY=""
