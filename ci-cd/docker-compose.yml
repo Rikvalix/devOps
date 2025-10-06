@@ -1,4 +1,19 @@
 services:
+
+  postgres:
+    image: postgres
+    restart: always
+    ports:
+      - 127.0.0.1:5432:5432
+    environments:
+      - POSTGRES_USER: ${POSTGRES_USER}
+      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      - POSTGRES_DB : ${POSTGRES_DB}
+    networks:
+      ci_network:
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
   jenkins:
     image: docker:dind
     container_name: jenkins-docker
@@ -72,6 +87,7 @@ networks:
     external: true
 
 volumes:
+  postgres_data:
   jenkins-docker-certs:
   jenkins-data:
   sonarqube_data:

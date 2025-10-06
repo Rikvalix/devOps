@@ -59,6 +59,11 @@ docker network create ci_network
 
 log_info "Lancement des containers..."
 
+# PostgreSQL ci
+log_info "Lancement Postgres pour le ci"
+docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d postgres
+log_info "PostgreSQL lancé"
+
 # Docker Registry
 log_info "Lancement Registry"
 docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d registry
