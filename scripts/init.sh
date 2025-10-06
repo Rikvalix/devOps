@@ -4,6 +4,9 @@
 # Auteur: Titouan DELION--DESROCHERS
 # Date: 2025-10-06
 
+# Coupe automatiquement le script en cas d'erreur d'une commande
+set -e
+
 # Variables fixes
 DOCKER_CICD="$(dirname "$0")/../ci-cd"
 
@@ -51,21 +54,24 @@ fi
 
 # Lancement des containers
 
+log_info "Création du réseau ci_network"
+docker network create ci_network
+
 log_info "Lancement des containers..."
 
 # Docker Registry
 log_info "Lancement Registry"
-docker compose up registry -d
+docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d registry
 log_info "Docker registry lancé"
 
 # SonarQube
 log_info "Lancement Sonarqube"
-docker compose up sonarqube -d
+docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d sonarqube
 log_info "SonarQube lancé"
 
 # Jenkins Blue Ocean
 log_info "Lancement Jenkins BlueOcean"
-docker compose up jenkins-blueocean -d
+docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d jenkins-blueocean
 log_info "Jenkins BlueOcean lancé"
 
 # Création environnement dev
