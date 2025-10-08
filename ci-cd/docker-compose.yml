@@ -5,32 +5,14 @@ services:
     restart: always
     ports:
       - 127.0.0.1:5432:5432
-    environments:
-      - POSTGRES_USER: ${POSTGRES_USER}
-      - POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      - POSTGRES_DB : ${POSTGRES_DB}
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
     networks:
       ci_network:
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  jenkins:
-    image: docker:dind
-    container_name: jenkins-docker
-    restart: always
-    privileged: true
-    ports:
-      - "127.0.0.1:2376:2376"
-    environment:
-      - DOCKER_TLS_CERTDIR=${JENKINS_DOCKER_TLS_CERTDIR}
-    networks:
-      ci_network:
-        aliases:
-          - docker
-    volumes:
-      - "jenkins-docker-certs:/certs/client"
-      - "jenkins-data:/var/jenkins_home"
-    command: ["--storage-driver", "overlay2"]
 
   jenkins-blueocean:
     build:
@@ -40,10 +22,8 @@ services:
     restart: on-failure
     networks:
       ci_network:
-    environment:
-      - DOCKER_HOST=${JENKINS_DOCKER_HOST} 
-      - DOCKER_CERT_PATH=${JENKINS_DOCKER_CERT_PATH}
-      - DOCKER_TLS_VERIFY=${JENKINS_DOCKER_TLS_VERIFY}
+    environment: 
+      - DOCKER_HOST=unix:///var/run/docker.sock
     ports:
       - "127.0.0.1:49000:8080"
     volumes:
@@ -89,7 +69,9 @@ networks:
 volumes:
   postgres_data:
   jenkins-docker-certs:
+    name: dev-ops_jenkins-docker-certs
   jenkins-data:
+    name: dev-ops_jenkins-data
   sonarqube_data:
   sonarqube_extensions:
   sonarqube_logs:
