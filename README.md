@@ -45,3 +45,11 @@ Réseau prod
 ### Schéma du réseau
 
 ![Alt schéma réseau](assets/network_schema.svg)
+
+## Initialisation 
+
+Le script situé dans `scripts/init.sh` permet d'installer l'environnement CI/CD et les 3 environnements: dev, rec, prod
+
+### Schéma d'initialisation
+
+![Schéma d'initialisation](assets/initialisation_schema.svg)

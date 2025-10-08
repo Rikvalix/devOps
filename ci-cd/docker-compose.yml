@@ -31,6 +31,24 @@ services:
       - jenkins-docker-certs:/certs/client:ro
       - /var/run/docker.sock:/var/run/docker.sock # < Docker de l'hôte
   
+  jenkins-agent-unbound:
+    build:
+      context: ./jenkins/agents/jenkins-unbound
+      dockerfile: Dockerfile
+    container_name: jenkins-agent-unbound
+    restart: on-failure
+    user: "jenkins:994"
+    networks:
+      ci_network:
+    environment:
+      - JENKINS_URL=http://jenkins-blueocean:8080/
+      - JENKINS_AGENT_NAME=java_agent
+      - JENKINS_SECRET=a5628744e0018bbad931ab25cfabbcdbb50b8f9894558c72a2a8eff980d4e922
+      - JENKINS_WORKDIR=/home/jenkins/agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    group_add:
+      - docker
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
