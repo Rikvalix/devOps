@@ -3,7 +3,7 @@ COPY . .
 RUN gradle clean build -x test
 
 # Création de l'image finale
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre-alpine
 WORKDIR /app
 COPY --from=ktor-builder /app/build/libs/*jar app.jar
 EXPOSE 8080
