@@ -80,6 +80,28 @@ services:
       - registry-data:/var/lib/registry
       - ./registry/config.yml:/etc/docker/registry/config.yml
 
+  registry-ui:
+    image: joxit/docker-registry-ui:main-debian
+    container_name: registry-ui
+    restart: always
+    networks:
+      - ci_network
+    ports:
+      - "5049:80"
+    environment:
+      - SINGLE_REGISTRY=true
+      - REGISTRY_TITLE=Docker Registry UI
+      - DELETE_IMAGES=true
+      - SHOW_CONTENT_DIGEST=true
+      - NGINX_PROXY_PASS_URL=http://registry:5000
+      - SHOW_CATALOG_NB_TAGS=true
+      - CATALOG_MIN_BRANCHES=1
+      - CATALOG_MAX_BRANCHES=1
+      - TAGLIST_PAGE_SIZE=100
+      - REGISTRY_SECURED=false
+      - CATALOG_ELEMENTS_LIMIT=1000
+
+
 networks:
   ci_network:
     external: true

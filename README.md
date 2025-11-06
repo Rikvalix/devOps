@@ -7,6 +7,7 @@ Une présentation Canva est disponible à ce [lien](https://www.canva.com/design
 ## Liens
 - Jenkins : https://jenkins.noknok.dev
 - SonarQube: https://sonarqube.noknok.dev
+- Registry UI (si actif): http://194.164.77.125:5049/ *Pas de config Nginx pour le moment*
 
 ## Réseaux
 Pour tous les tableaux la colonne `Port` indique le port sur le localhost de l'hôte
@@ -20,6 +21,7 @@ Réseau docker: ci-network
 | SonarQube  | 9000  | sonarqube   |
 | PostgreSQL | 5432  | postgresql  |
 | Registry   | 5050  | registry:2  |
+| Registry UI | 5049 | joxit/docker-registry-ui |
 
 Réseau: dev
 

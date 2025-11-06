@@ -10,7 +10,7 @@ APP_NAME="" # Nom de l'application final
 BRANCH_NAME="" # Branche git concerné
 APP_VERSION="" # Version de l'app
 
-while getopts "r:b:a:n:h" opt; do
+while getopts "r:b:a:n:v:h" opt; do
   case $opt in
     r) REGISTRY="$OPTARG" ;;
     b) BUILDER_NAME="$OPTARG" ;;
@@ -34,6 +34,14 @@ if [ -z "$REGISTRY" ] || [ -z "$BUILDER_NAME" ] || [ -z "$APP_NAME" ] || [ -z "$
   echo "Utilise -h pour afficher l’aide."
   exit 1
 fi
+
+echo "Lancement du script de déploiement
+Adresse du registry: $REGISTRY
+Image du builder: $BUILDER_NAME
+Application: $APP_NAME
+Branche actuelle: $BRANCH_NAME
+Version: $APP_VERSION
+"
 
 # Déclaration environnement
 ENV_TYPE=""
