@@ -28,23 +28,28 @@ Réseau: dev
 | Ktor dev       | 5051 |
 | Postgresql dev | 5433 |
 
-Réseau: recette
+Réseau: rec
 
 | Service        | Port |
 |----------------|------|
 | Ktor rec       | 5052 |
 | Postgresql rec | 5434 |
 
-Réseau prod
+Réseau: prod
 
 | Service         | Port |
 |-----------------|------|
 | Ktor prod       | 5053 |
+| Ktor prod 2     | 5054 | 
 | Postgresql prod | 5435 |
 
 ### Schéma du réseau
 
 ![Alt schéma réseau](assets/network_schema.svg)
+
+## Gestion du load balancing au déploiement
+
+![Schéma load balancing](assets/load_balancing_schema.svg)
 
 ## Initialisation 
 
@@ -53,3 +58,5 @@ Le script situé dans `scripts/init.sh` permet d'installer l'environnement CI/CD
 ### Schéma d'initialisation
 
 ![Schéma d'initialisation](assets/initialisation_schema.svg)
+
+
