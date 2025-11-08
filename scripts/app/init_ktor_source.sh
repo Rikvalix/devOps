@@ -57,6 +57,6 @@ fi
 
 # Crée l'image source
 log_info "Build de l'image $SOURCE_NAME..."
-docker build -t "$SOURCE_NAME" -f "$ROOT_DIR/ktor/source/Dockerfile" "$ROOT_DIR/ktor/source" 
+docker build -t "$SOURCE_NAME" -f "$ROOT_DIR/app/ktor/source/Dockerfile" "$ROOT_DIR/app/ktor/source" 
 docker images "$SOURCE_NAME"
 

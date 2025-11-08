@@ -9,17 +9,23 @@ set -e
 
 # Variables fixes
 DOCKER_CICD="$(dirname "$0")/../ci-cd"
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Chargement utils
 source "$(dirname "$0")/utils/common.sh"
 
+# Chargement config.env
+set -a 
+source $SCRIPT_DIR/config.env
+set +a
 
 # Confirmation utilisateur
 log_info "Lancement du script d'installation de l'environnement CI/CD et développement, recette et production"
 log_warning "Veillez à lancer le script avec les permissions sudo"
 log_warning "Avant de poursuivre assurez vous d'avoir configurés les différents fichiers de configuration: 
 - fichier .env dans le dossier /dev-ops/ci-cd
-- fichier config.env dans le dossier /dev-ops/scripts/save/config.env"
+- fichier config.env dans le dossier /dev-ops/scripts/
+- fichier config.env dans le dossier /dev-ops/scripts/ci-cd/save/config.env"
 
 read -p "Voulez vous poursuivre l'installation ? (y/n) : " response
 
@@ -79,24 +85,52 @@ log_info "Lancement Jenkins BlueOcean"
 docker compose -f "$DOCKER_CICD/docker-compose.yml" up -d jenkins-blueocean
 log_info "Jenkins BlueOcean lancé"
 
+# Création du builder Ktor
+log_info "Création du builder Ktor..."
+bash $(dirname "$0")/app/init_ktor_builder.sh \
+	-r $REGISTRY_URL \
+	-b $KTOR_BUILDER
+log_info "Builder Ktor $KTOR_BUILDER crée et envoyé sur le registry $REGISTRY_URL"
+
 # Création environnement dev
 
 log_info "Création de l'environnement dev..."
-bash $(dirname "$0")/app/create_environment.sh -n dev -r localhost:5050 -b ktor-builder:21-9.1-p 5051
-# Ajouter le container postgreSQL
+bash $(dirname "$0")/app/create_environment.sh \ 
+	-n dev \
+       	-r $REGISTRY_URL \
+	-b $KTOR_BUILDER \
+	-p $KTOR_DEV_PORT \
+	-u $POSTGRES_DEV_USER \
+	-w $POSTGRES_DEV_PASSWORD \
+	-y $POSTGRES_DEV_PORT 
+
 log_info "Environnement de développement crée"
 
 
 # Création environnement recette
 log_info "Création de l'environnement de recette"
-bash $(dirname "$0")/app/create_environment.sh -n rec -r localhost:5050 -b ktor-builder:21-9.1-p 5052
-# Ajouter le container postgreSQL
+bash $(dirname "$0")/app/create_environment.sh \
+	-n rec \
+	-r $REGISTRY_URL \
+	-b $KTOR_BUILDER \
+	-p $KTOR_REC_PORT \
+	-u $POSTGRES_REC_USER \
+	-w $POSTGRES_REC_PASSWORD \
+	-y $POSTGRES_REC_PORT
+
 log_info "Environnement de recette crée"
 
 # Création environnement de production
 log_info "Création de l'environnement de production"
-bash $(dirname "$0")/app/create_environment.sh -n prod -r localhost:5050 -b ktor-builder:21-9.1-p 5053
-# Ajouter le container postgreSQL
+bash $(dirname "$0")/app/create_environment.sh \
+	-n prod \
+	-r $REGISTRY_URL \
+	-b $KTOR_BUILDER \
+	-p $KTOR_PROD_1_PORT \
+	-u $POSTGRES_PROD_USER \
+	-w $POSTGRES_PROD_PASSWORD \
+	-y $POSTGRES_PROD_PORT
+
 log_info "Environnement de production crée"
 
 

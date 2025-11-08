@@ -4,26 +4,51 @@
 # Auteur: Titouan DELION--DESROCHERS
 # Date: 2025-10-05
 
+set -e
 # Chargement utils
 source "$(dirname "$0")/../utils/common.sh"
 
-# Script de création d'un environnement de développement
+# Arguments globaux
 ENV_NAME=""
+
+# Arguments liés à Ktor
 REGISTRY=""
 BUILDER_NAME=""
 SOURCE_NAME="ktor-source"
 KTOR_PORT=""
 
+# Arguments liés à Postgres
+DB_USER=""
+DB_PASSWORD=""
+DB_PORT=""
+
 IMAGE="$REGISTRY/$BUILDER_NAME"
 
-while getopts "n:r:b:p:" opt; do
-  case $opt in
-    n) ENV_NAME=$OPTARG ;; # -n argument
-    r) REGISTRY=$OPTARG ;; # -r argument
-    b) BUILDER_NAME=$OPTARG ;; #-b argument
-    p) KTOR_PORT=$OPTARG ;;
-    \?) echo "Usage: $0 [-n nom_de_l'environnement] [-r adresse du registry] [-b nom donnée au builder] [-p ktor port] " >&2; exit 1 ;;
-  esac
+usage() {
+	echo "Usage: $0 -n <env_name> -r <registry url> -b <nom du builder> -p <Ktor port> -u <Utilisateur DB> -w <Mot de passe DB> -y <Port DB>" >&2
+
+}
+
+while getopts "n:r:b:p:u:w:y:" opt; do
+	case $opt in
+	  	n) ENV_NAME=$OPTARG ;; # -n argument
+	  	r) REGISTRY=$OPTARG ;; # -r argument
+	  	b) BUILDER_NAME=$OPTARG ;; #-b argument
+	  	p) KTOR_PORT=$OPTARG ;;
+	  	u) DB_USER=$OPTARG ;;
+	  	w) DB_PASSWORD=$OPTARG ;;
+	  	y) DB_PORT=$OPTARG ;;     
+	  
+	  	\?)
+			echo "Option invalide: -$OPTARG" >&2
+	    		usage
+	    		;;
+	  	:)
+			echo "L'option -$OPTARG requiert un argument." >&2
+			usage
+			;;
+	
+  	esac
 done
 
 if [ -z "$ENV_NAME" ]; then
@@ -46,6 +71,20 @@ if [ -z "$KTOR_PORT" ]; then
 	exit 1
 fi
 
+if [ -z "$DB_USER" ]; then
+	log_error "L'arguement -u (Utilisateur de la db) est obligatoire"
+	exit 1
+fi
+
+if [ -z "$DB_PASSWORD" ]; then
+	log_error "L'argument -w (Mot de passe de la db) est obligatoire"
+	exit 1
+fi
+
+if [ -z "$DB_PORT" ]; then
+	log_error "L'argument -y (Port de la db) est obligatoire"
+	exit 1
+fi
 
 # Création du network
 if docker network ls --format '{{.Name}}' | grep -qx "$ENV_NAME"; then
@@ -70,3 +109,14 @@ docker run -d \
 
 log_info "Container $SOURCE_NAME démarré, sur 127.0.0.1:$KTOR_PORT"
 
+# Création de la base de données
+
+POSTGRESCONTAINER=postgres-source-$ENV_NAME
+
+log_info "Création du container PostgreSQL"
+
+bash "$(dirname "$0")"/create_postgres.sh \
+	-n $ENV_NAME \
+	-p $DB_PORT \
+	-u $DB_USER \
+	-w $DB_PASSWORD \
