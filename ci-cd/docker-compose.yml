@@ -31,11 +31,11 @@ services:
       - jenkins-docker-certs:/certs/client:ro
       - /var/run/docker.sock:/var/run/docker.sock # < Docker de l'hôte
   
-  jenkins-agent-unbound:
+  jenkins-java-runner:
     build:
       context: ./jenkins/agents/jenkins-unbound
       dockerfile: Dockerfile
-    container_name: jenkins-agent-unbound
+    container_name: jenkins-java-runner
     restart: on-failure
     user: "jenkins:994"
     networks:
@@ -49,6 +49,26 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock
     group_add:
       - docker
+  
+  jenkins-android-runner:
+    build:
+      context: ./jenkins/agents/jenkins-android
+      dockerfile: Dockerfile
+    container_name: jenkins-android-runner
+    restart: on-failure
+    user: "jenkins:994"
+    networks:
+      ci_network:
+
+    environment:
+      - JENKINS_URL=http://jenkins-blueocean:8080/
+      - JENKINS_AGENT_NAME=android_agent
+      - JENKINS_SECRET=ebf1a5715aa6d8a4befe24fa6c040bfc80fb16e4af17354f4e08b8470e4679d4
+      - JENKINS_WORKDIR=/home/jenkins/agent
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    
+
   sonarqube:
     image: sonarqube:latest
     container_name: sonarqube
