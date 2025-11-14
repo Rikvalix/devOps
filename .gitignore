@@ -1,1 +1,2 @@
 *.env
+app/ktor/fichier_config/
