@@ -71,7 +71,7 @@ DB_NAME="sae_$ENV_NAME"
 
 log_info "Création et démarrage du container: $CONTAINER_NAME"
 log_info "Port: $DB_PORT"
-log_info "Réseau docker: $DB_NETWORK"
+log_info "Réseau docker: $ENV_NAME"
 log_info "Environnement: $ENV_NAME"
 log_info "Utilisateur: $DB_USER"
 log_info "Base de données: $DB_NAME"
@@ -79,13 +79,18 @@ log_info "Volume: $VOLUME_NAME"
 log_info "Image: $IMAGE "
 log_info "---"
 
+if docker container inspect "$CONTAINER_NAME" >/dev/null 2>&1; then
+    log_info "Le conteneur $CONTAINER_NAME existe déjà. Suppression en cours..."
+    docker rm -f "$CONTAINER_NAME" >/dev/null
+fi
+
 docker run -d \
   --name "$CONTAINER_NAME" \
   --network "$ENV_NAME" \
   -e "POSTGRES_USER=$DB_USER" \
   -e "POSTGRES_PASSWORD=$DB_PASSWORD" \
   -e "POSTGRES_DB=$DB_NAME" \
-  -p "$DB_PORT:5432" \
+  -p "127.0.0.1:$DB_PORT:5432" \
   -v "$VOLUME_NAME:/var/lib/postgresql/data" \
   "$IMAGE"
 
@@ -96,7 +101,7 @@ for _ in {1..15}; do
     STATUS=$(docker container inspect -f '{{.State.Status}}' $CONTAINER_NAME 2>/dev/null || echo "starting")
 
     if [ "$STATUS" = "running" ]; then
-   	if docker exec $CONTAINER_NAME pg_isready -U $DB_USER -d $DATABASE_NAME -q; then
+   	if docker exec $CONTAINER_NAME pg_isready -U $DB_USER -d $DB_NAME -q; then
             log_info "Container $CONTAINER_NAME lancé et base de données prête !"
             exit 0
         fi
