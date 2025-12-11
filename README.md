@@ -19,12 +19,11 @@ Réseau docker: ci-network
 | Service     | Port  | Image                    |
 | ----------- | ----- | ------------------------ |
 | Blue Ocean  | 49000 | custom                   |
-| Jenkins     | 2376  | docker:dind              |
+| Jenkins     | 2376  | jenkins/jenkins:2.516.3-jdk21              |
 | SonarQube   | 9000  | sonarqube                |
 | PostgreSQL  | 5432  | postgresql               |
 | Registry    | 5050  | registry:2               |
 | Registry UI | 5049  | joxit/docker-registry-ui |
-
 Réseau: dev
 
 | Service        | Port |
