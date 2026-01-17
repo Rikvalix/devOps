@@ -75,5 +75,5 @@ fi
 docker run -d \
   --name "$CONTAINER_NAME" \
   -p "127.0.0.1:${PORT_MAP}:8080" \
+   --network "$ENV_TYPE" \
   "$IMAGE_TAG"
-

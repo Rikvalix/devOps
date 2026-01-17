@@ -22,7 +22,7 @@ usage() {
     	echo "  -p : Port de la base de données (ex: 5432)" >&2
     	echo "  -u : Utilisateur de la base de données" >&2
     	echo "  -w : Mot de passe de la base de données" >&2
-    	exit 1
+   	exit 1
 }
 
 while getopts "n:p:u:w:" opt; do
@@ -31,7 +31,6 @@ while getopts "n:p:u:w:" opt; do
 		p) DB_PORT=$OPTARG ;; # Port de la base de données 
 		u) DB_USER=$OPTARG ;; # Utilisateur
 		w) DB_PASSWORD=$OPTARG ;; # mot de passe
-		
 	       	\?) 
             	    echo "Option invalide: -$OPTARG" >&2
                     usage
