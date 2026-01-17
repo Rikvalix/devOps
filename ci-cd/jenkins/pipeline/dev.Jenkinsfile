@@ -14,15 +14,18 @@ pipeline {
 
         stage('Init') {
             steps {
+				cleanWs()
                 git branch: 'dev', url: 'git@gitlab.univ-nantes.fr:but-info-etu/info3/e2526/sae5/equipe-1-2/back-end.git', credentialsId: 'f2e308ef-3890-4969-867a-8d362fd3a81b'
             }
         }
 		stage('Build') {
 			steps {
-				cleanWs()
 
-				checkout scm
-
+                git branch: 'dev', url: 'git@gitlab.univ-nantes.fr:but-info-etu/info3/e2526/sae5/equipe-1-2/back-end.git', credentialsId: 'f2e308ef-3890-4969-867a-8d362fd3a81b'
+            }
+        }
+		stage('Build') {
+			steps {
 				withCredentials([file(credentialsId: "ktor-source-dev", variable: 'APP_CONFIG')]) {
 					script {
 						sh "mkdir -p src/main/resources"
