@@ -29,7 +29,9 @@ Options requises:
   -c, --container_port <port> Port par défaut du container 
 
 Exemple:
-  ./blue_green_deployment.sh -i myapp:v2 -n bridge -a myapp-blue -b myapp-green -p "8080 8081" -c 8080
+  ./blue_green_deployment.sh -i ktor:1.0.1-prod -n prod -a ktor-source-prod -b ktor-source-prod-2 -p "127.0.0.1:5053 127.0.0.1:5054" -c 8080
+  ou
+  ./blue_green_deployment.sh -i ktor:1.0.1-rec -n rec -a ktor-source-rec -p "127.0.0.1:5052" -c 8080 
 EOF
   exit 1
 }
@@ -48,7 +50,7 @@ while [[ "$#" -gt 0 ]]; do
 done
 
 # Vérification de tous les arguments
-if [[ -z "$DOCKER_IMAGE" || -z "$NETWORK" || -z "$CONTAINER_A" || -z "$CONTAINER_B" || -z "$HOST_PORTS_LIST" ]]; then
+if [[ -z "$DOCKER_IMAGE" || -z "$NETWORK" || -z "$CONTAINER_A" || -z "$HOST_PORTS_LIST" ]]; then
   echo "Erreur: Tous les arguments sont requis."
   usage
 fi
@@ -143,20 +145,31 @@ update_instance() {
 
 echo "Début du déploiement blue/green de $DOCKER_IMAGE"
 
+# Cas où une seule instance à Maj
+if [ -z "$CONTAINER_B" ]; then
+    if update_instance "$CONTAINER_A" "${PORTS_ARRAY[0]}"; then
+        echo "Instance A mise à jour. Aucune instance B déclarée."
+        echo "Le système est à jour."
+        exit 0 # Succès (0 est préférable à 1 pour une réussite)
+    else
+        echo "ARRÊT : Échec sur l'instance A unique."
+        exit 1
+    fi
+fi
+
+
+# Cas où deux instances à maj
 if update_instance "$CONTAINER_A" "${PORTS_ARRAY[0]}"; then
     echo "Instance A mise à jour. Passage à l'instance B..."
     
-    # Mise à jour Instance B (Port 2) - Uniquement si A a marché
     if update_instance "$CONTAINER_B" "${PORTS_ARRAY[1]}"; then
         echo "Les deux instances sont à jour."
     else
-        echo "ATTENTION : Instance A est à jour, mais Instance B a échoué (et a été restaurée)."
+        echo "ATTENTION : Instance A est à jour, mais Instance B a échoué."
         echo "L'état du système est mixte (vOld + vNew)."
         exit 1
     fi
 else
-    echo "ARRÊT : Echec sur l'instance A."
-    echo "Le système est resté sur l'ancienne version."
+    echo "ARRÊT : Échec sur l'instance A. Système inchangé."
     exit 1
 fi
-

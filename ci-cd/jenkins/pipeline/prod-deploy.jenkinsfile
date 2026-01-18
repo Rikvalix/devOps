@@ -27,11 +27,11 @@ pipeline {
     					sh """
                             chmod +x blue_green_deployment.sh
 
-                            bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${env.VERSION}-dev" \
-                                               -n dev \
-                                               -a ktor-source-dev \
-                                               -b ktor-source-dev-2 \
-                                               -p "127.0.0.1:5051 127.0.0.1:5054" \
+                            bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${env.VERSION}-prod" \
+                                               -n prod \
+                                               -a ktor-source-prod \
+                                               -b ktor-source-prod-2 \
+                                               -p "127.0.0.1:5053 127.0.0.1:5054" \
                                                -c 8080
                         """
     				}
