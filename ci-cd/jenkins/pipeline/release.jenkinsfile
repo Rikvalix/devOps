@@ -1,4 +1,3 @@
-@Field def BRANCH_TO_CHECKOUT = ""
 
 pipeline {
 	agent {
