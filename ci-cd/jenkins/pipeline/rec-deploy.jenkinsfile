@@ -28,7 +28,7 @@ pipeline {
                         chmod +x blue_green_deployment.sh
 
                         bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${env.VERSION}-rec" \
-                                        -n prod \
+                                        -n rec \
                                         -a ktor-source-rec \
                                         -p "127.0.0.1:5052" \
                                         -c 8080
