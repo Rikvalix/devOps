@@ -59,8 +59,8 @@ fi
 # IFS => séparateur ici espace
 IFS=' ' read -r -a PORTS_ARRAY <<< "$HOST_PORTS_LIST"
 
-if [[ "${#PORTS_ARRAY[@]}" -ne 2 ]]; then
-    echo "Erreur: Il faut exactement 2 ports dans la liste."
+if [[ "${#PORTS_ARRAY[@]}" -ne 1 ]]; then
+    echo "Erreur: Il faut au moins 1 port dans la liste."
     exit 1
 fi
 
