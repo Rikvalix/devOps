@@ -27,7 +27,7 @@ pipeline {
     					sh """
                             chmod +x blue_green_deployment.sh
 
-                            bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${params.VERSION}-dev" \
+                            bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${env.VERSION}-dev" \
                                                -n dev \
                                                -a ktor-source-dev \
                                                -b ktor-source-dev-2 \
