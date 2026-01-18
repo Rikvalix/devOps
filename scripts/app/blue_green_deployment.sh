@@ -59,11 +59,12 @@ fi
 # IFS => séparateur ici espace
 IFS=' ' read -r -a PORTS_ARRAY <<< "$HOST_PORTS_LIST"
 
-if [[ "${#PORTS_ARRAY[@]}" -ne 1 ]]; then
-    echo "Erreur: Il faut au moins 1 port dans la liste."
+NUM_PORTS="${#PORTS_ARRAY[@]}"
+
+if [[ "$NUM_PORTS" -lt 1 || "$NUM_PORTS" -gt 2 ]]; then
+    echo "Erreur: Il faut 1 ou 2 ports (reçu: $NUM_PORTS)."
     exit 1
 fi
-
 
 # Gère la logique de déploiement: Eteindre -> Démarrer -> Tester -> Rollback
 update_instance() {
