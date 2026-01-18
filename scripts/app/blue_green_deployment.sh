@@ -29,7 +29,7 @@ Options requises:
   -c, --container_port <port> Port par défaut du container 
 
 Exemple:
-  ./deploy.sh -i myapp:v2 -n bridge -a myapp-blue -b myapp-green -p "8080 8081" -c 8080
+  ./blue_green_deployment.sh -i myapp:v2 -n bridge -a myapp-blue -b myapp-green -p "8080 8081" -c 8080
 EOF
   exit 1
 }

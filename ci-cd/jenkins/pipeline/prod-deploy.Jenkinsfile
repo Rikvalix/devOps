@@ -1,0 +1,52 @@
+pipeline {
+	agent {
+		label 'java_agent'
+	}
+	environment {
+		REGISTRY = 'localhost:5050'
+		APP_NAME = 'ktor'
+	}
+	options {
+		skipDefaultCheckout(true)
+	}
+	stages {
+        stage('Init') {
+            steps {
+				cleanWs() // Clear le dossier courant
+				dir('ci') {
+				    echo "Récupération des scripts"
+				    checkout scm
+				}
+            }
+        }
+		stage('Blue Green Deployment') {
+			steps {
+			    dir('ci/scripts/app') {
+    				script {
+    					
+    					sh """
+                            chmod +x blue_green_deployment.sh
+
+                            bash blue_green_deployment.sh -i "${REGISTRY}/${APP_NAME}:${params.VERSION}-dev" \
+                                               -n dev \
+                                               -a ktor-source-dev \
+                                               -b ktor-source-dev-2 \
+                                               -p "127.0.0.1:5051 127.0.0.1:5054" \
+                                               -c 8080
+                        """
+    				}
+			    }
+			}
+		}
+	}
+	post {
+		always {
+			cleanWs(cleanWhenNotBuilt: false,
+				deleteDirs: true,
+				disableDeferredWipeout: true,
+				notFailBuild: true,
+				patterns: [[pattern: '.gitignore', type: 'INCLUDE'],
+					[pattern: '.propsfile', type: 'EXCLUDE']])
+		}
+	}
+}
