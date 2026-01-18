@@ -41,6 +41,7 @@ services:
     networks:
       ci_network:
     environment:
+      - DOCKER_API_VERSION=1.44
       - JENKINS_URL=http://jenkins-blueocean:8080/
       - JENKINS_AGENT_NAME=java_agent
       - JENKINS_SECRET=a5628744e0018bbad931ab25cfabbcdbb50b8f9894558c72a2a8eff980d4e922

@@ -100,7 +100,7 @@ update_instance() {
   for i in {1..24}; do
     # -s = silent -o = /dev/null -w = code HTTP, si 200 alors up
     echo "$port"
-    status_code=$(curl -s -o /dev/null -w "%{http_code}" "http://$port/")
+    status_code=$(docker run --rm --network host curlimages/curl -s -o /dev/null -w "%{http_code}" "http://$port/")
 
     if [[ "$status_code" == "200" ]]; then
       echo "Test de vie OK"
