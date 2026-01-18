@@ -64,7 +64,7 @@ docker push $IMAGE_TAG
 
 echo "Image envoyé fin de script"
 
-exit 1
+exit 0
 
 
 
