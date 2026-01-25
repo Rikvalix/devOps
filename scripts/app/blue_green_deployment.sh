@@ -99,8 +99,8 @@ update_instance() {
   echo "Lancement du test de vie"
   local testVie=false
 
-  # Essai pendant 120 secondes (24 x 5s)
-  for i in {1..24}; do
+  # Essai pendant 120 secondes (12 x 10s)
+  for i in {1..12}; do
     # -s = silent -o = /dev/null -w = code HTTP, si 200 alors up
     echo "$port"
     status_code=$(docker run --rm --network host curlimages/curl -s -o /dev/null -w "%{http_code}" "http://$port/")
@@ -110,9 +110,9 @@ update_instance() {
       testVie=true
       break
     else
-      echo "Test de vie $i échouée, statut: $status_code, re-tentative dans 5 secondes"
+      echo "Test de vie $i échouée, statut: $status_code, re-tentative dans 10  secondes"
     fi
-    sleep 5
+    sleep 10
   done
 
   # Décision : Valider / Rollback
