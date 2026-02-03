@@ -1,106 +1,20 @@
-# Installation Jenkins Docker
+# Installation de Jenkins
 
-Ce tutoriel est une installation **basique** de chez **basique** de Jenkins, je n'ai pas détaillé de notions de sécurité, utilisateurs, ni de multipipelines. De plus, ce guide peut contenir des **erreurs** car j'apprends également à me servir de l'outil.
+Afin de lancer uniquement jenkins:
 
----
+Positionnez vous dans le dossier `dev-ops/ci-cd/`
 
-## Création réseau Docker
-
-```bash
-docker network create jenkins
+```
+docker compose up -d  jenkins-blueocean
 ```
 
----
-
-## Image Docker dind
-
-Faire tourner des containers Docker dans un container Docker :
-
-```bash
-docker run \
-  --name jenkins-docker \
-  --rm \
-  --detach \
-  --privileged \
-  --network jenkins \
-  --network-alias docker \
-  --env DOCKER_TLS_CERTDIR=/certs \
-  --volume jenkins-docker-certs:/certs/client \
-  --volume jenkins-data:/var/jenkins_home \
-  --publish 2376:2376 \
-  docker:dind \
-  --storage-driver overlay2
+Pour lancer les deux runners:
 ```
-
----
-
-## Créer l'image BlueOcean
-
-**Dockerfile :**
-
-```dockerfile
-FROM jenkins/jenkins:2.516.3-jdk21
-USER root
-RUN apt-get update && apt-get install -y lsb-release ca-certificates curl && \
-    install -m 0755 -d /etc/apt/keyrings && \
-    curl -fsSL https://download.docker.com/linux/debian/gpg -o /etc/apt/keyrings/docker.asc && \
-    chmod a+r /etc/apt/keyrings/docker.asc && \
-    echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.asc] \
-    https://download.docker.com/linux/debian $(. /etc/os-release && echo \"$VERSION_CODENAME\") stable" \
-    | tee /etc/apt/sources.list.d/docker.list > /dev/null && \
-    apt-get update && apt-get install -y docker-ce-cli && \
-    apt-get clean && rm -rf /var/lib/apt/lists/*
-USER jenkins
-RUN jenkins-plugin-cli --plugins "blueocean docker-workflow json-path-api"
+docker compuse up -d jenkins-java-runner jenkins-android-runner
 ```
-
----
-
-### Build l'image
-
-```bash
-docker build -t myjenkins-blueocean:2.516.3-1 .
-```
-
----
-
-### Run l'image BlueOcean
-
-Jenkins émettra sur le port 49000 du serveur :
-
-```bash
-docker run \
-  --name jenkins-blueocean \
-  --restart=on-failure \
-  --detach \
-  --network jenkins \
-  --env DOCKER_HOST=tcp://docker:2376 \
-  --env DOCKER_CERT_PATH=/certs/client \
-  --env DOCKER_TLS_VERIFY=1 \
-  --publish 49000:8080 \
-  --volume jenkins-data:/var/jenkins_home \
-  --volume jenkins-docker-certs:/certs/client:ro \
-  myjenkins-blueocean:2.516.3-1
-```
-
----
 
 ## Nginx et Jenkins
 Suivre la configuration de la documentation de jenkins [lien](https://www.jenkins.io/doc/book/system-administration/reverse-proxy-configuration-with-jenkins/reverse-proxy-configuration-nginx/)
-```
-
-- Down le container et le supprimer
-```bash
-docker container stop jenkins_blueocean
-docker container remove jenkins_blueocean
-```
-- Relancer le container blue-ocean 
-
-Modifier la partie publish afin de faire émettre le container uniquement sur le localhost
-```
---publish 127.0.0.1:49000:8080
-```
-
 
 ---
 
@@ -139,29 +53,7 @@ Nécessite :
 
 ---
 
-### 1. Configurer Java
-
-Java est fourni dans le container Docker, il faut donc juste configurer la variable `JAVA_HOME`.
-
-- Se connecter au container Docker :
-
-```bash
-docker exec -it jenkins-blueocean bash
-```
-
-- Afficher la variable :
-
-```bash
-echo $JAVA_HOME
-```
-
-Dans Jenkins :  
-*Administrer Jenkins → Tools*  
-![alt text](assets/jdk.png)
-
----
-
-### 2. Configurer Git
+### 1. Configurer Git
 
 Git est fourni dans le container.
 
@@ -171,7 +63,7 @@ Dans Jenkins :
 
 ---
 
-### 3. Créer une paire de clé SSH
+### 2. Créer une paire de clé SSH
 
 - Dans le container :
 
@@ -194,7 +86,7 @@ ssh -T git@gitlab.univ-nantes.fr
 
 ---
 
-#### 4. Ajouter le credentials
+#### 3. Ajouter le credentials
 
 Pour plus de détails : [doc](https://www.jenkins.io/doc/book/using/using-credentials/)
 
@@ -214,13 +106,13 @@ Dans Jenkins :
 
 ---
 
-#### 5. Associer la clé à GitLab
+#### 4. Associer la clé à GitLab
 
 Procédure standard d'ajout d'une clé publique à GitLab. Ceci permet au runner de cloner le repo.
 
 ---
 
-#### 6. Configuration du projet Jenkins
+#### 5. Configuration du projet Jenkins
 
 Cliquer sur votre projet puis sur la roue crantée *Configuration*.
 
@@ -244,10 +136,6 @@ Dans ce cas, deux choix s'offrent à vous :
 [Youtube](https://youtu.be/KsTMy0920go?si=SP-aJNGN_mX05OIq)
 
 - Installer le plugin `SonarQube Scanner for Jenkins Version2.18`
-
-
-
-
 
 
 # Ressources
