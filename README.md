@@ -2,7 +2,7 @@
 
 Ce projet contient l'ensembles des README, Dockerfile, scripts liés aux déploiements d'application. Les outils sont déployés via l'outil de virtualisation **Docker**.
 
-*Ce projet a été réalisé dans le cadre d'un projet académique pendant le semestre 5 de BUT-3 à l'IUT de Nantes.*
+
 
 Une présentation Canva est disponible à ce [lien](https://www.canva.com/design/DAG0etyUpJE/eRwLGYtf6Q1lViWCVMNrQQ/edit?utm_content=DAG0etyUpJE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
