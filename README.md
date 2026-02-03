@@ -31,28 +31,6 @@ Réseau: monitoring
 | Cadvisor      | /    | gcr.io/cadvisor/cadvisor:latest |
 | node-exporter | /    | prom/node-exporter:v1.5.0       |
 
-Réseau: dev
-
-| Service        | Port |
-| -------------- | ---- |
-| Ktor dev       | 5051 |
-| Postgresql dev | 5433 |
-
-Réseau: rec
-
-| Service        | Port |
-| -------------- | ---- |
-| Ktor rec       | 5052 |
-| Postgresql rec | 5434 |
-
-Réseau: prod
-
-| Service         | Port |
-| --------------- | ---- |
-| Ktor prod       | 5053 |
-| Ktor prod 2     | 5054 |
-| Postgresql prod | 5435 |
-
 Serveur web:
 
 | Service | Port _interface 0.0.0.0_ |
