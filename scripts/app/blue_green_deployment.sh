@@ -66,6 +66,17 @@ if [[ "$NUM_PORTS" -lt 1 || "$NUM_PORTS" -gt 2 ]]; then
     exit 1
 fi
 
+# Lance le rollback d'un container
+run_rollback() {
+  local backup_container=$1
+  local target_container=$2
+  docker rename "$backup_container" "$target_container"
+  docker start "$target_container"
+    
+  echo "Rollback terminée: L'ancienne version est opérationnel"
+  
+}
+
 # Gère la logique de déploiement: Eteindre -> Démarrer -> Tester -> Rollback
 update_instance() {
   local container_name=$1
@@ -94,7 +105,11 @@ update_instance() {
     --network "$NETWORK" \
     --restart unless-stopped \
     -p "$port:$CONTAINER_PORT" \
-    "$DOCKER_IMAGE" >/dev/null
+    "$DOCKER_IMAGE" || {
+      echo "Echec du démarrage de la nouvelle instance"
+      run_rollback "$backup_name" "$container_name"
+      return 1
+    }
 
   echo "Lancement du test de vie"
   local testVie=false
@@ -131,11 +146,7 @@ update_instance() {
     docker rm -f "$container_name" >/dev/null
 
     if docker ps -a --format '{{.Names}}' | grep -q "^${backup_name}$"; then
-      docker rename "$backup_name" "$container_name"
-      docker start "$container_name"
-      
-      echo "Rollback terminée: L'ancienne version est opérationnel"
-    
+      run_rollback "$backup_name" "$container_name"
     else
       echo "Erreur critique: Impossible de restaurer la backup"
     fi
