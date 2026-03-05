@@ -1,2 +1,4 @@
 *.env
 app/ktor/fichier_config/
+web/data
+web/letsencrypt
