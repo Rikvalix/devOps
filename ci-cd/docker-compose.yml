@@ -10,7 +10,7 @@ services:
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
       - POSTGRES_DB=${POSTGRES_DB}
     networks:
-      ci_network:
+      - ci_network
     volumes:
       - postgres_data:/var/lib/postgresql/data
 
@@ -21,11 +21,10 @@ services:
     container_name: jenkins-blueocean
     restart: on-failure
     networks:
-      ci_network:
+      - ci_network
+      - proxy
     environment: 
       - DOCKER_HOST=unix:///var/run/docker.sock
-    ports:
-      - "127.0.0.1:49000:8080"
     volumes:
       - jenkins-data:/var/jenkins_home
       - jenkins-docker-certs:/certs/client:ro
@@ -39,7 +38,7 @@ services:
     restart: on-failure
     user: "jenkins:994"
     networks:
-      ci_network:
+      - ci_network
     environment:
       - DOCKER_API_VERSION=1.44
       - JENKINS_URL=http://jenkins-blueocean:8080/
@@ -59,7 +58,7 @@ services:
     restart: on-failure
     user: "jenkins:994"
     networks:
-      ci_network:
+      - ci_network
 
     environment:
       - JENKINS_URL=http://jenkins-blueocean:8080/
@@ -74,8 +73,6 @@ services:
     image: sonarqube:latest
     container_name: sonarqube
     restart: always
-    ports:
-      - "127.0.0.1:9000:9000"
     environment:
       - SONAR_JDBC_URL=${SONAR_JDBC_URL}
       - SONAR_JDBC_USERNAME=${SONAR_JDBC_USER}
@@ -83,7 +80,7 @@ services:
       - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=${SONAR_ES_BOOTSTRAP_CHECKS_DISABLE}    
     networks:
       - ci_network
-
+      - proxy
     volumes:
       - "sonarqube_data:/opt/sonarqube/data"
       - "sonarqube_extensions:/opt/sonarqube/extensions"
@@ -95,6 +92,7 @@ services:
     restart: always
     networks:
       - ci_network
+      - proxy
     ports:
       - "127.0.0.1:5050:5000"
     volumes:
@@ -107,8 +105,6 @@ services:
     restart: always
     networks:
       - ci_network
-    ports:
-      - "127.0.0.1:5049:80"
     environment:
       - SINGLE_REGISTRY=true
       - REGISTRY_TITLE=Docker Registry UI
@@ -124,6 +120,8 @@ services:
 
 
 networks:
+  proxy:
+    external: true
   ci_network:
     external: true
 

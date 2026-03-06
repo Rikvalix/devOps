@@ -3,8 +3,6 @@ services:
     image: grafana/grafana
     container_name: grafana
     restart: always
-    ports:
-      - 127.0.0.1:3000:3000
     environment:
       - GF_PANELS_DISABLE_SANITIZE_HTML=true
       - GF_SECURITY_ADMIN_USER=${GRAFANA_USER}
@@ -12,6 +10,7 @@ services:
       - GF_USERS_ALLOW_SIGN_UP=false
     networks:
       - monitoring
+      - proxy
     volumes:
       - "grafana-data:/var/lib/grafana"
       - "./grafana/custom.ini:/etc/grafana/grafana.ini"
@@ -21,8 +20,6 @@ services:
     container_name: prometheus
     restart: always
     user: "1001"
-    ports:
-      - 127.0.0.1:9090:9090
     environment:
       - PUID=1001
       - PGID=1001
@@ -104,5 +101,8 @@ volumes:
       device: "./prometheus"
 
 networks:
+  proxy:
+    external: true
   monitoring:
     driver: bridge
+
