@@ -12,10 +12,14 @@ Le réseau `proxy` de type `bridge` permet de brancher NPM aux autres containers
 docker create network proxy 
 ```
 **Lancement**
-Cela créera un dossier `/data` dans le répertoire, il peut être modifier dans le `docker-compose`
+Cela créera un dossier dans `/srv/docker/nginx-proxy-manager/`, il peut être modifié dans le `docker-compose`
 ```bash
 docker compose up -d nginx-proxy-manager
 ```
 
+**Sécurité**
 
+```bash
+sudo chmod 700 /srv/docker/nginx-proxy-manager
+```
 *Une documentation plus importante arrive*
