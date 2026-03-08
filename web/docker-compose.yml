@@ -1,12 +1,12 @@
 services:
   nginx-proxy-manager:
-    image: 'jc21/nginx-proxy-manager:latest'
-    container_name: 'nginx-proxy-manager'
+    image: "jc21/nginx-proxy-manager:latest"
+    container_name: "nginx-proxy-manager"
     restart: always
     ports:
-      - '80:80' # HTTP
-      - '443:443' # HTTPS
-      - '81:81' # Console Admin
+      - "80:80" # HTTP
+      - "443:443" # HTTPS
+      - "81:81" # Console Admin
 
     environment:
       TZ: "Europe/Paris"
@@ -14,8 +14,16 @@ services:
     volumes:
       - /srv/docker/nginx-proxy-manager/data:/data
       - /srv/docker/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+
+  nginx-intern:
+    image: "nginx:latest"
+    container_name: "intern_nginx"
+    restart: always
     
-    
+    volumes:
+      - /var/www/:/usr/share:ro
+      - ./nginx/conf/:/etc/nginx/conf.d:ro
+
 networks:
   default:
     external: true
