@@ -19,7 +19,8 @@ services:
     image: "nginx:latest"
     container_name: "intern_nginx"
     restart: always
-    
+    ports:
+     - "80:80"
     volumes:
       - /var/www/:/usr/share:ro
       - ./nginx/conf/:/etc/nginx/conf.d:ro

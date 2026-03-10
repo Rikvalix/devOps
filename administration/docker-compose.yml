@@ -6,12 +6,28 @@ services:
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - portainer_data:/data
-  
+    networks:
+      - proxy
+
+  wiki:
+    image: ghcr.io/requarks/wiki:2
+    restart: unless-stopped
+    environment:
+      DB_TYPE: postgres
+      DB_HOST: postgres
+      DB_PORT: 5432
+      DB_USER: 
+      DB_PASS:
+      DB_NAME: wiki
+    networks:
+      - proxy
+
 volumes:
   portainer_data:
     name: portainer_data
 
 networks:
-  default:
+  proxy:
     external: true
-    name: proxy
+  wiki:
+
